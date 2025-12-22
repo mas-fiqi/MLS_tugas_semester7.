@@ -6,6 +6,7 @@ class CourseCard extends StatelessWidget {
   final String lecturerCode;
   final double progress;
   final Color iconColor;
+  final VoidCallback? onTap;
 
   const CourseCard({
     super.key,
@@ -13,14 +14,17 @@ class CourseCard extends StatelessWidget {
     required this.lecturerCode,
     required this.progress,
     this.iconColor = kPrimaryLightColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -87,6 +91,7 @@ class CourseCard extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:learning_management_system/core/constants/colors.dart';
 import 'package:learning_management_system/features/home/presentation/pages/home_screen.dart';
+import 'package:learning_management_system/features/my_classes/presentation/pages/my_classes_screen.dart';
+import 'package:learning_management_system/features/home/presentation/pages/notification_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,11 +14,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  // List Halaman untuk Bottom Navigation
   final List<Widget> _pages = [
     const HomeScreen(),
-    const Scaffold(body: Center(child: Text("Halaman Kelas Saya (Coming Soon)"))), // Placeholder
-    const Scaffold(body: Center(child: Text("Halaman Notifikasi (Coming Soon)"))), // Placeholder
+    const MyClassesScreen(),
+    const NotificationScreen(), 
   ];
 
   void _onItemTapped(int index) {

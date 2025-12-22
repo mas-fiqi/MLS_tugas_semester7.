@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_management_system/core/constants/colors.dart';
 import 'package:learning_management_system/features/home/presentation/widgets/course_card.dart';
+import 'package:learning_management_system/features/profile/presentation/pages/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -39,10 +40,18 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const CircleAvatar(
-                    radius: 24,
-                    backgroundImage: AssetImage('assets/images/profile_placeholder.png'), // Pastikan ada placeholder atau gunakan Icon
-                    child: Icon(Icons.person),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                      );
+                    },
+                    child: const CircleAvatar(
+                      radius: 24,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.person, color: kPrimaryColor),
+                    ),
                   ),
                 ],
               ),
