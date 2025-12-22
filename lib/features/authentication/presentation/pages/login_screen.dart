@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_management_system/core/constants/colors.dart';
 import 'package:learning_management_system/features/authentication/presentation/widgets/login_clipper.dart';
+import 'package:learning_management_system/features/home/presentation/pages/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -105,7 +106,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Login Button
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Implement Login Logic
+                      // Navigate to Main Screen (Dashboard)
+                      Navigator.pushReplacement(
+                        context, 
+                        MaterialPageRoute(builder: (context) => const MainScreen())
+                      );
                     },
                     child: const Text(
                       "MASUK",

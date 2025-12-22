@@ -28,20 +28,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor, // White
+      backgroundColor: kPrimaryColor, // Merah Marun
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Placeholder for Logo if needed later, currently just Text or empty
-            // Image.asset('assets/images/logo.png', height: 150),
+            // Icon Placeholder for Logo
+            const Icon(Icons.school_rounded, color: Colors.white, size: 100),
             const SizedBox(height: 20),
             const Text(
-              "Loading...",
+              "Learning Management System",
               style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            const SizedBox(height: 20),
+            // Optional: Loading indicator
+            const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           ],
         ),
