@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 // Ganti home dengan SplashScreen nanti di Perintah #2
+import 'package:learning_management_system/features/authentication/presentation/pages/splash_screen.dart';
 import 'package:flutter/cupertino.dart'; 
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'LMS Hybrid App',
       theme: appTheme, // Terapkan tema
-      home: const Scaffold(body: Center(child: Text('Loading...'))), // Placeholder sementara. Akan diganti SplashScreen.
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
