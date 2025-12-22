@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_management_system/core/constants/colors.dart';
+import 'package:learning_management_system/features/quiz/presentation/pages/quiz_info_screen.dart';
+import 'package:learning_management_system/features/my_classes/presentation/pages/task_detail_screen.dart';
 
 class CourseDetailScreen extends StatelessWidget {
   final String courseName;
@@ -80,10 +82,10 @@ class CourseDetailScreen extends StatelessWidget {
             ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _buildTaskItem("Tugas 1: Studi Kasus", "Selesai", true),
-                _buildTaskItem("Kuis 1: Konsep Dasar", "Selesai", true),
-                _buildTaskItem("Tugas 2: Analisis", "Tenggat: Besok", false),
-                _buildTaskItem("UTS", "Tenggat: 2 Minggu lagi", false),
+                _buildTaskItem(context, "Tugas 1: Studi Kasus", "Selesai", true),
+                _buildTaskItem(context, "Kuis 1: Konsep Dasar", "Selesai", true),
+                _buildTaskItem(context, "Tugas 2: Analisis", "Tenggat: Besok", false),
+                _buildTaskItem(context, "UTS", "Tenggat: 2 Minggu lagi", false),
               ],
             ),
           ],
@@ -92,31 +94,131 @@ class CourseDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTaskItem(String title, String status, bool isDone) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: Icon(
-          isDone ? Icons.check_circle : Icons.radio_button_unchecked,
-          color: isDone ? kAccentColor : Colors.grey,
-          size: 30,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            decoration: isDone ? TextDecoration.lineThrough : null,
-            fontWeight: FontWeight.bold,
+  Widget _buildTaskItem(BuildContext context, String title, String status, bool isDone) {
+    bool isQuiz = title.toLowerCase().contains('kuis');
+    // Determine visuals based on type
+    IconData icon = isQuiz ? Icons.quiz_rounded : Icons.assignment_rounded;
+    Color iconColor = isQuiz ? Colors.orange : kPrimaryColor; // Assumes kPrimaryColor is available
+    Color iconBgColor = isQuiz ? Colors.orange.withOpacity(0.1) : kPrimaryColor.withOpacity(0.1);
+
+    // Status styling
+    Color statusColor;
+    IconData statusIcon;
+    if (isDone) {
+      statusColor = Colors.green;
+      statusIcon = Icons.check_circle_rounded;
+    } else if (status.contains("Besok") || status.contains("Minggu") || status.contains("Tenggat")) {
+      statusColor = Colors.orange[700]!;
+      statusIcon = Icons.access_time_rounded;
+    } else {
+      statusColor = Colors.grey;
+      statusIcon = Icons.circle_outlined;
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            offset: const Offset(0, 4),
+            blurRadius: 10,
+          ),
+        ],
+        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            if (isQuiz) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const QuizInfoScreen()),
+              );
+            } else if (title.toLowerCase().contains("tugas")) {
+               Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TaskDetailScreen()),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // Icon Box
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 24),
+                ),
+                const SizedBox(width: 16),
+                // Content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Icon(statusIcon, size: 14, color: statusColor),
+                          const SizedBox(width: 4),
+                          Text(
+                            status,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: statusColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                // Chevron or Action Button
+                if (!isDone)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: kPrimaryColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: const Text(
+                      "Kerjakan",
+                      style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                else
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.grey),
+              ],
+            ),
           ),
         ),
-        subtitle: Text(
-          status,
-          style: TextStyle(
-            color: isDone ? kAccentColor : Colors.orange,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {},
       ),
     );
   }
