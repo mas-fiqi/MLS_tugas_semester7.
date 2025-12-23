@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_management_system/features/quiz/presentation/pages/quiz_result_screen.dart';
 import 'package:learning_management_system/core/constants/colors.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -155,19 +156,23 @@ class _QuizScreenState extends State<QuizScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
                   onPressed: () {
-                    setState(() {
-                      // Logic for next question
-                      if (_currentQuestionIndex < 14) { // Dummy logic up to 15
+                    if (_currentQuestionIndex < 14) {
+                      setState(() {
                         _currentQuestionIndex++;
-                        _selectedAnswerIndex = null; // Reset selection
-                      }
-                    });
+                        _selectedAnswerIndex = null;
+                      });
+                    } else {
+                       Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const QuizResultScreen()),
+                      );
+                    }
                   },
                   child: Row(
-                    children: const [
-                      Text("Soal Selanjutnya"),
-                      SizedBox(width: 8),
-                      Icon(Icons.arrow_forward),
+                    children: [
+                      Text(_currentQuestionIndex == 14 ? "Selesai" : "Soal Selanjutnya"),
+                      const SizedBox(width: 8),
+                      Icon(_currentQuestionIndex == 14 ? Icons.check : Icons.arrow_forward),
                     ],
                   ),
                 ),

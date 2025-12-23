@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isPasswordVisible = false;
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -21,121 +21,129 @@ class _LoginScreenState extends State<LoginScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kBackgroundColor,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Custom Clipper Background (Top part)
-            Stack(
+        child: Container(
+        width: double.infinity,
+        color: kBackgroundColor,
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ClipPath(
-                  clipper: LoginCurvedClipper(),
-                  child: Container(
-                    height: size.height * 0.4, // 40% of screen height
+                // Logo / Icon
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: kPrimaryColor.withOpacity(0.2),
+                        blurRadius: 20,
+                        spreadRadius: 5,
+                      )
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.school_rounded,
+                    size: 64,
                     color: kPrimaryColor,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.school, size: 80, color: Colors.white),
-                        SizedBox(height: 10),
-                        Text(
-                          "LMS Hybrid",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                
+                // Title
+                const Text(
+                  "LMS Hybrid",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: kTextColor,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                 Text(
+                  "Welcome back, Future Leader!",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: kSubtitleColor.withOpacity(0.8),
+                  ),
+                ),
+                const SizedBox(height: 48),
+
+                // Inputs are handled by InputDecorationTheme in app_theme.dart, so we just use standard fields
+                TextFormField(
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.email_outlined),
+                    hintText: "Email / NIP / NIM",
+                  ),
+                  style: const TextStyle(color: kTextColor),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  obscureText: _isObscure,
+                  style: const TextStyle(color: kTextColor),
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    hintText: "Password",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isObscure ? Icons.visibility_off : Icons.visibility,
+                        color: kSubtitleColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isObscure = !_isObscure;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                
+                // Forgot Password
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      // TODO: Implement Forgot Password Logic
+                    },
+                    child: Text(
+                      "Lupa Password?",
+                      style: TextStyle(color: kPrimaryColor.withOpacity(0.8)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // Login Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MainScreen()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    ),
+                    child: const Text(
+                      "MASUK",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
               ],
             ),
-            
-            // Login Form
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: kTextColor,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 30),
-                  
-                  // Email Field
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: "Email / NIP / NIM",
-                      prefixIcon: Icon(Icons.person_outline),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  
-                  // Password Field
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: !_isPasswordVisible,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  
-                  // Login Button
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to Main Screen (Dashboard)
-                      Navigator.pushReplacement(
-                        context, 
-                        MaterialPageRoute(builder: (context) => const MainScreen())
-                      );
-                    },
-                    child: const Text(
-                      "MASUK",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 10),
-                  TextButton(
-                    onPressed: () {
-                      // TODO: Implement Forgot Password Logic
-                    },
-                    child: const Text(
-                      "Lupa Password?",
-                      style: TextStyle(color: kTextLightColor),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
+      ),
       ),
     );
   }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:learning_management_system/core/constants/colors.dart';
 import 'package:learning_management_system/features/quiz/presentation/pages/quiz_info_screen.dart';
 import 'package:learning_management_system/features/my_classes/presentation/pages/task_detail_screen.dart';
+import 'package:learning_management_system/features/my_classes/presentation/pages/video_player_screen.dart';
+import 'package:learning_management_system/features/my_classes/presentation/pages/document_viewer_screen.dart';
+import 'package:learning_management_system/features/my_classes/presentation/pages/video_player_screen.dart';
 
 class CourseDetailScreen extends StatelessWidget {
   final String courseName;
@@ -65,12 +68,22 @@ class CourseDetailScreen extends StatelessWidget {
                       ListTile(
                         leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
                         title: const Text("Slide Presentasi"),
-                        onTap: () {},
+                        onTap: () {
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const DocumentViewerScreen()),
+                          );
+                        },
                       ),
                       ListTile(
                         leading: const Icon(Icons.video_library, color: Colors.blue),
                         title: const Text("Rekaman Kelas"),
-                        onTap: () {},
+                        onTap: () {
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const VideoPlayerScreen()),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -98,7 +111,7 @@ class CourseDetailScreen extends StatelessWidget {
     bool isQuiz = title.toLowerCase().contains('kuis');
     // Determine visuals based on type
     IconData icon = isQuiz ? Icons.quiz_rounded : Icons.assignment_rounded;
-    Color iconColor = isQuiz ? Colors.orange : kPrimaryColor; // Assumes kPrimaryColor is available
+    Color iconColor = isQuiz ? Colors.orange : kPrimaryColor;
     Color iconBgColor = isQuiz ? Colors.orange.withOpacity(0.1) : kPrimaryColor.withOpacity(0.1);
 
     // Status styling
@@ -118,16 +131,16 @@ class CourseDetailScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: kSurfaceColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(0.2),
             offset: const Offset(0, 4),
             blurRadius: 10,
           ),
         ],
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Material(
         color: Colors.transparent,
@@ -172,7 +185,7 @@ class CourseDetailScreen extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: kTextColor,
                         ),
                       ),
                       const SizedBox(height: 6),

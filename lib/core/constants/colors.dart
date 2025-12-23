@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 
-// Warna Primer (warna kayu  serat/kuning pudar keputihan  sama hitam dari Header/Button)
-// Berdasarkan analisis UX, ini adalah warna utama aplikasi Anda.
-const Color kPrimaryColor = Color(0xFF8B0000); 
-const Color kPrimaryLightColor = Color(0xFFFF4D4D); 
+// Brand Colors (Modern Light Clean)
+const Color kBackgroundColor = Color(0xFFF8F9FD); // Light Grey-ish White
+const Color kSurfaceColor = Colors.white;         // Clean White for cards
+const Color kPrimaryColor = Color(0xFF20B2AA);    // Light Teal (Fallback)
+const Color kAccentColor = Color(0xFF42A5F5);     // Soft Blue (Secondary)
+const Color kErrorColor = Color(0xFFCF6679);
 
-// Warna Aksen/Success (Hijau dari status Selesai/Tombol Utama)
-const Color kAccentColor = Color(0xFF00C853); 
+// Gradients
+const LinearGradient kPrimaryGradient = LinearGradient(
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+  colors: [
+    Color(0xFF20B2AA), // Light Teal
+    Color(0xFF42A5F5), // Soft Blue
+  ],
+);
 
-// Warna Netral & Latar Belakang
-const Color kBackgroundColor = Color(0xFFFFFFFF); 
-const Color kSurfaceColor = Color(0xFFF0F0F0); 
+// Text Colors
+const Color kTextColor = Color(0xFF333333);        // Dark Grey for readability
+const Color kSubtitleColor = Color(0xFF9E9E9E);    // Light Grey for subtitles
+const Color kTextLightColor = Color(0xFFFFFFFF);   // White Text (on gradient)
 
-// Warna Teks
-const Color kTextColor = Color(0xFF212121); 
-const Color kTextLightColor = Color(0xFF757575); 
+// UI Utility Colors
+const Color kShadowColor = Color.fromARGB(13, 0, 0, 0); // Very subtle shadow
+const Color kOutlineColor = Color(0xFFEEEEEE);          // Very light border
+const Color kInputBackgroundColor = Colors.white;       // White input for light theme
