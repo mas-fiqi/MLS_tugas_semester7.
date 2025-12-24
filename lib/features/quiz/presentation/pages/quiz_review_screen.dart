@@ -5,20 +5,26 @@ class QuizReviewScreen extends StatelessWidget {
   const QuizReviewScreen({super.key});
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
-        title: const Text("Review Jawaban"),
-        backgroundColor: kPrimaryColor,
-        foregroundColor: Colors.white,
+        title: const Text("Review Jawaban", style: TextStyle(color: kTextColor)),
+        backgroundColor: kBackgroundColor,
+        foregroundColor: kTextColor,
+        elevation: 0,
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(color: kOutlineColor.withOpacity(0.1), height: 1.0),
+        ),
       ),
       body: Column(
         children: [
           // Header Info
           Container(
             padding: const EdgeInsets.all(16),
-            color: Colors.grey.shade100,
+            color: kCardColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -34,7 +40,7 @@ class QuizReviewScreen extends StatelessWidget {
             child: ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: 15, // Dummy 15 questions
-              separatorBuilder: (context, index) => const Divider(),
+              separatorBuilder: (context, index) => Divider(color: kOutlineColor.withOpacity(0.1)),
               itemBuilder: (context, index) {
                 return _buildReviewItem(context, index + 1);
               },
@@ -49,9 +55,9 @@ class QuizReviewScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+        Text(label, style: const TextStyle(fontSize: 12, color: kSubtitleColor)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: kTextColor)),
       ],
     );
   }
@@ -79,21 +85,21 @@ class QuizReviewScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
+                    color: kCardColor,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey.shade300),
+                    border: Border.all(color: kOutlineColor.withOpacity(0.2)),
                   ),
                   child: const Text(
                     "Apa yang dimaksud dengan Usability dalam konteks User Interface Design? ...",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 13, color: Colors.black87),
+                    style: TextStyle(fontSize: 13, color: kSubtitleColor),
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
+                Text(
                   "Jawaban Tersimpan",
-                  style: TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic),
+                  style: TextStyle(fontSize: 11, color: kSubtitleColor.withOpacity(0.5), fontStyle: FontStyle.italic),
                 ),
               ],
             ),
@@ -113,7 +119,7 @@ class QuizReviewScreen extends StatelessWidget {
               child: Text(
                 "Lihat Soal",
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: kPrimaryColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
                 ),

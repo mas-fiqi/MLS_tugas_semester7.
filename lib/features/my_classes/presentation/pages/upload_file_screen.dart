@@ -1,94 +1,160 @@
 import 'package:flutter/material.dart';
 import 'package:learning_management_system/core/constants/colors.dart';
 import 'dart:ui';
+import 'dart:async'; // For Timer simulation
 
-class UploadFileScreen extends StatelessWidget {
+class UploadFileScreen extends StatefulWidget {
   const UploadFileScreen({super.key});
+
+  @override
+  State<UploadFileScreen> createState() => _UploadFileScreenState();
+}
+
+class _UploadFileScreenState extends State<UploadFileScreen> {
+  String? _selectedFn;
+  bool _isUploading = false;
+
+  void _pickFile() {
+    setState(() {
+      _isUploading = true;
+    });
+    
+    // Simulate file picking delay
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() {
+          _isUploading = false;
+          _selectedFn = "Tugas_Analisis_UID.pdf"; // Simulated file
+        });
+      }
+    });
+  }
+
+  void _submitTask() {
+    if (_selectedFn == null) return;
+
+    // Simulate upload delay
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Mengupload tugas...")),
+    );
+    
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        Navigator.pop(context); 
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("Tugas berhasil dikirim!"),
+            backgroundColor: kPrimaryColor,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
-        title: const Text("Upload File"),
-        backgroundColor: kPrimaryColor,
-        foregroundColor: Colors.white,
+        title: const Text("Upload File", style: TextStyle(color: kTextColor)),
+        backgroundColor: kBackgroundColor,
+        foregroundColor: kTextColor,
+        elevation: 0,
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(color: kOutlineColor.withOpacity(0.1), height: 1.0),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Maksimum File 5MB. Format yang diperbolehkan: PDF, DOCX, ZIP.",
-              style: TextStyle(color: Colors.grey, fontSize: 13),
-            ),
-            const SizedBox(height: 16),
-            
-            // Upload Area (Dashed Border)
-            Expanded(
-              child: CustomPaint(
-                painter: DashedRectPainter(color: Colors.grey.shade400, strokeWidth: 2.0, gap: 5.0),
-                child: Container(
-                  width: double.infinity,
-                  color: Colors.grey.withOpacity(0.05),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.cloud_upload_outlined, size: 80, color: Colors.blue.shade300),
-                      const SizedBox(height: 16),
-                      const Text(
-                        "File yang akan diupload tampil di sini",
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "Drag & drop atau klik untuk memilih",
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Maksimum File 5MB. Format yang diperbolehkan: PDF, DOCX, ZIP.",
+                style: TextStyle(color: kSubtitleColor, fontSize: 13),
+              ),
+              const SizedBox(height: 24),
+              
+              // Upload Area (Resized & Interactive)
+              GestureDetector(
+                onTap: _pickFile,
+                child: CustomPaint(
+                  painter: DashedRectPainter(
+                    color: _selectedFn != null ? kPrimaryColor : kOutlineColor, 
+                    strokeWidth: 2.0, 
+                    gap: 6.0
+                  ),
+                  child: Container(
+                    height: 280, // Fixed height, not too big
+                    width: double.infinity,
+                    color: kCardColor.withOpacity(0.3),
+                    child: _isUploading
+                        ? const Center(child: CircularProgressIndicator(color: kPrimaryColor))
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _selectedFn != null 
+                                  ? Icon(Icons.check_circle, size: 60, color: kPrimaryColor)
+                                  : Icon(Icons.cloud_upload_outlined, size: 60, color: kSubtitleColor),
+                              const SizedBox(height: 16),
+                              Text(
+                                _selectedFn ?? "File yang akan diupload tampil di sini",
+                                style: TextStyle(
+                                  color: _selectedFn != null ? kPrimaryColor : kSubtitleColor, 
+                                  fontSize: 16,
+                                  fontWeight: _selectedFn != null ? FontWeight.bold : FontWeight.normal
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              if (_selectedFn == null)
+                                const Text(
+                                  "Tap atau klik untuk memilih file",
+                                  style: TextStyle(color: kSubtitleColor, fontSize: 12),
+                                ),
+                            ],
+                          ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
+              const SizedBox(height: 48),
 
-            // Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      // Logic to pick file
-                    },
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      side: const BorderSide(color: Colors.grey),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              // Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _pickFile,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(color: kOutlineColor),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        foregroundColor: kTextColor,
+                      ),
+                      child: const Text("Pilih File"),
                     ),
-                    child: const Text("Pilih File", style: TextStyle(color: Colors.black87)),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Logic to upload
-                       Navigator.pop(context); // Simulate success and go back
-                       ScaffoldMessenger.of(context).showSnackBar(
-                         const SnackBar(content: Text("Tugas berhasil dikirim!")),
-                       );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey.shade800, // Active/Grey as requested
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _selectedFn != null ? _submitTask : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kPrimaryColor,
+                        disabledBackgroundColor: kCardColor,
+                        disabledForegroundColor: kSubtitleColor.withOpacity(0.5),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        elevation: _selectedFn != null ? 4 : 0,
+                      ),
+                      child: const Text("Simpan", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                     ),
-                    child: const Text("Simpan", style: TextStyle(color: Colors.white)),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -128,49 +194,36 @@ class DashedRectPainter extends CustomPainter {
     Path path = Path();
     path.moveTo(a.dx, a.dy);
     bool shouldDraw = true;
-    Offset currentPoint = a;
-
-    double radians = 0.0;
-    if (size.width != 0) {
-      radians = size.width > 0 ? 0.0 : 3.14159; // right or left
-    } else {
-      radians = size.height > 0 ? 1.5708 : -1.5708; // down or up 
-    }
-
-    double distance = 0.0;
+    
     double totalDistance = (size.width != 0) ? size.width.abs() : size.height.abs();
+    double distance = 0.0;
 
     while (distance < totalDistance) {
+      double nextDistance = distance + gap;
+      if (nextDistance > totalDistance) nextDistance = totalDistance;
+
       if (shouldDraw) {
-        // Draw line
-        double nextDistance = distance + gap;
-        if (nextDistance > totalDistance) nextDistance = totalDistance;
-        
-        // Calculate next point
-        // Simple logic for rectilinear rect
         if (size.width != 0) {
            path.lineTo(a.dx + (size.width > 0 ? nextDistance : -nextDistance), a.dy);
         } else {
            path.lineTo(a.dx, a.dy + (size.height > 0 ? nextDistance : -nextDistance));
         }
-        distance = nextDistance;
       } else {
-        // Skip gap
-         double nextDistance = distance + gap;
-           if (size.width != 0) {
+        if (size.width != 0) {
            path.moveTo(a.dx + (size.width > 0 ? nextDistance : -nextDistance), a.dy);
         } else {
            path.moveTo(a.dx, a.dy + (size.height > 0 ? nextDistance : -nextDistance));
         }
-        distance = nextDistance;
       }
+      distance = nextDistance;
       shouldDraw = !shouldDraw;
     }
     return path;
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(covariant DashedRectPainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }
+
